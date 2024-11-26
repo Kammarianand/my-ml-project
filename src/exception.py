@@ -1,4 +1,6 @@
 import sys
+from src.logger import logging
+
 def error_message_details(error,error_detials:sys):
     _,_,exe_tb = error_detials.exc_info()
     file_name = exe_tb.tb_frame.f_code.co_filename
