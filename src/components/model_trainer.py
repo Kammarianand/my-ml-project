@@ -43,7 +43,43 @@ class ModelTrainer:
                 'CatBoost': CatBoostRegressor(verbose=False)
             }
 
-            model_report: dict = evaluate_models(x_train=x_train, y_train=y_train, x_test=x_test, y_test=y_test, models=models)
+            params = {
+                "DecisionTree": {
+                    'criterion': ['squared_error', 'friedman_mse', 'absolute_error', 'poisson'],
+                },
+                "RandomForest": {
+                    'n_estimators': [8, 16, 32, 64, 128, 256]
+                },
+                "GradientBoosting": {
+                    'learning_rate': [0.1, 0.01, 0.05, 0.001],
+                    'subsample': [0.6, 0.7, 0.75, 0.8, 0.85, 0.9],
+                    'n_estimators': [8, 16, 32, 64, 128, 256]
+                },
+                "LinearRegression": {},
+                "KNeighbors": {
+                    'n_neighbors': [3, 5, 7, 9]
+                },
+                "SVR": {
+                    'kernel': ['linear', 'poly', 'rbf', 'sigmoid'],
+                    'C': [0.1, 1, 10, 100],
+                    'gamma': ['scale', 'auto']
+                },
+                "XGB": {
+                    'learning_rate': [0.1, 0.01, 0.05, 0.001],
+                    'n_estimators': [8, 16, 32, 64, 128, 256]
+                },
+                "CatBoost": {
+                    'depth': [6, 8, 10],
+                    'learning_rate': [0.01, 0.05, 0.1],
+                    'iterations': [30, 50, 100]
+                },
+                "AdaBoost": {
+                    'learning_rate': [0.1, 0.01, 0.5, 0.001],
+                    'n_estimators': [8, 16, 32, 64, 128, 256]
+                }
+            }
+
+            model_report: dict = evaluate_models(x_train=x_train, y_train=y_train, x_test=x_test, y_test=y_test, models=models, param=params)
 
             best_model_score = max(sorted(model_report.values()))
             best_model_name = list(model_report.keys())[list(model_report.values()).index(best_model_score)]
